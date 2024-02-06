@@ -2,7 +2,6 @@ public class welcome
 {
   public static void main(String args[]) 
   {
-  System.out.println("Welcome\n");
-  System.out.println("I CHANGED THE FILE SEE");
+  System.out.println("Welcome");
   }
 }
