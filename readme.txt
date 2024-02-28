@@ -1,6 +1,6 @@
 Chess Application by Jaysen Jaehnig using python 3.12.2, pygame 2.5.2, chess 1.10.0, stockfish 3.28.0
 All images used sourced from https://greenchess.net/info.php?item=downloads
-Tested a on system with 7800x3d proccessor with stockfish version included. You may need to download another version of the stockfish engine if issues occur.
+Tested on a system with 7800x3d proccessor with stockfish version included. You may need to download another version of the stockfish engine if issues occur.
 
 Name: stockfish
 Version: 3.28.0
