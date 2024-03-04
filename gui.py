@@ -8,7 +8,7 @@ import random
 
 pygame.init()
 
-# NEEDS TO RUN IN 7:5 ASPECT RATIO 1050x750 for 1080p screens, recommended to run at 1400x750
+# NEEDS TO RUN IN 7:5 ASPECT RATIO 1050x750 for 1080p screens, recommended to run at 1400x1000
 WIDTH = 1050
 HEIGHT = 750
 LIGHTSQUARE = (151, 226, 196)
