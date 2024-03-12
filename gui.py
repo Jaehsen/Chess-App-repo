@@ -9,33 +9,35 @@ import random
 pygame.init()
 
 # NEEDS TO RUN IN 7:5 ASPECT RATIO 1050x750 for 1080p screens, recommended to run at 1400x1000
-WIDTH = 1050
-HEIGHT = 750
-LIGHTSQUARE = (151, 226, 196)
-DARKSQUARE= (47,131,97)
+WIDTH:int = 1050
+HEIGHT:int = 750
+LIGHTSQUARE:tuple[int,int,int] = (151, 226, 196)
+DARKSQUARE:tuple[int,int,int] = (47,131,97)
 
-screen = pygame.display.set_mode([WIDTH, HEIGHT])
+screen:pygame.Surface = pygame.display.set_mode([WIDTH, HEIGHT])
 pygame.display.set_caption("Chess")
 pygame.display.set_icon(pygame.image.load(os.path.join('images', 'chessboard.png')))
-font = pygame.font.SysFont('Arial_Bold', round((HEIGHT/1000)*30))
-big_font = pygame.font.SysFont('Arial_Bold', round((HEIGHT/1000)*50))
-timer = pygame.time.Clock()
-fps = 60
-coords = [] # list for coordinates of any current target squares
-legalMovesForSquare = []
-targetSquares = []
+font:pygame.font = pygame.font.SysFont('Arial_Bold', round((HEIGHT/1000)*30))
+big_font:pygame.font = pygame.font.SysFont('Arial_Bold', round((HEIGHT/1000)*50))
+timer:pygame.time.Clock = pygame.time.Clock()
+fps:float = 60
+coords:list = [] # list for coordinates of any current target squares
+legalMovesForSquare:list = []
+targetSquares:list = []
 
-moveList = [] # move list in short algebraic notation for displaying moves on side menu
-fenList = [] # list of FEN strings for each move made on the board, used for implementing back and forward buttons by keeping track of all board postions that have occured in game
+moveList:list = [] # move list in short algebraic notation for displaying moves on side menu
+fenList:list = [] # list of FEN strings for each move made on the board, used for implementing back and forward buttons by keeping track of all board postions that have occured in game
 
 
-currentBestMove = [] # list containing one string representing the current best move in uci notation. list needed for clear() function
+currentBestMove:list[str] = [] # list containing one string representing the current best move in uci notation. list needed for clear() function
 
-playername = "Jaysen"
-player2name = "Stockfish"
+playername:str = "Jaysen"
+player2name:str = "Stockfish"
 
-DEFAULT_IMAGE_SIZE = (round(WIDTH/14), round(HEIGHT/10))
-DEFAULT_SMALL_IMAGE_SIZE = (round(WIDTH/28), round(HEIGHT/20))
+DEFAULT_IMAGE_SIZE:tuple[int,int] = (round(WIDTH/14), round(HEIGHT/10))
+DEFAULT_SMALL_IMAGE_SIZE:tuple[int,int] = (round(WIDTH/28), round(HEIGHT/20))
+
+#all of the image loading could be moved to another file to reduce the size of this one
 
 BLACKPAWNIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'black-bpawn.png')).convert_alpha(), DEFAULT_IMAGE_SIZE)
 BLACKROOKIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'black-rook.png')).convert_alpha(), DEFAULT_IMAGE_SIZE)
@@ -60,6 +62,9 @@ deadWHITEROOKIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('imag
 deadWHITEKNIGHTIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'white-knight.png')).convert_alpha(), DEFAULT_SMALL_IMAGE_SIZE)
 deadWHITEBISHOPIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'white-bishop.png')).convert_alpha(), DEFAULT_SMALL_IMAGE_SIZE)
 deadWHITEQUEENIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'white-queen.png')).convert_alpha(), DEFAULT_SMALL_IMAGE_SIZE)
+
+def getImage(peice:str,small:bool) -> pygame.surface:
+    """Get an image of a peice based off of it's respective string. For example, 'q' will return a queen image. The small boolean will make the resulting image the small version."""
 
 
 def paint(board: chess.Board, currentScrollVal: int, perspectiveWhite: bool, playerWhite: bool):
@@ -134,6 +139,7 @@ def drawPieces(board: chess.Board, perspectiveWhite: bool): # draw pieces on boa
     blackXOffset = round((WIDTH/1400)*10)
     whiteXOffset = round((WIDTH/1400)*10)
     deadPieces = chessApp.boardToDeadPiecesList(board)
+    print(deadPieces)
     if perspectiveWhite:
         if len(deadPieces) != 0: # draw dead pieces if list is not empty
 
