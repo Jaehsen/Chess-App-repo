@@ -139,7 +139,6 @@ def drawPieces(board: chess.Board, perspectiveWhite: bool): # draw pieces on boa
     blackXOffset = round((WIDTH/1400)*10)
     whiteXOffset = round((WIDTH/1400)*10)
     deadPieces = chessApp.boardToDeadPiecesList(board)
-    print(deadPieces)
     if perspectiveWhite:
         if len(deadPieces) != 0: # draw dead pieces if list is not empty
 
