@@ -5,6 +5,7 @@ import sys
 import os
 import AI
 import random
+import pieceImages
 
 pygame.init()
 
@@ -63,10 +64,8 @@ deadWHITEKNIGHTIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('im
 deadWHITEBISHOPIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'white-bishop.png')).convert_alpha(), DEFAULT_SMALL_IMAGE_SIZE)
 deadWHITEQUEENIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'white-queen.png')).convert_alpha(), DEFAULT_SMALL_IMAGE_SIZE)
 
-def getImage(peice:str,small:bool) -> pygame.surface:
-    """Get an image of a peice based off of it's respective string. For example, 'q' will return a queen image. The small boolean will make the resulting image the small version."""
-
-
+images=pieceImages.PieceImages(DEFAULT_IMAGE_SIZE,DEFAULT_SMALL_IMAGE_SIZE)
+    
 def paint(board: chess.Board, currentScrollVal: int, perspectiveWhite: bool, playerWhite: bool):
     screen.fill(DARKSQUARE) # fill screen with color of dark squares
     for m in range(32):
@@ -135,46 +134,54 @@ def paint(board: chess.Board, currentScrollVal: int, perspectiveWhite: bool, pla
         drawPieces(board, perspectiveWhite)
 
 def drawPieces(board: chess.Board, perspectiveWhite: bool): # draw pieces on board in positons specified by board object
-
+    deadPieces=chessApp.getDeadPieces(board)
     blackXOffset = round((WIDTH/1400)*10)
     whiteXOffset = round((WIDTH/1400)*10)
-    deadPieces = chessApp.boardToDeadPiecesList(board)
+    # deadPieces = chessApp.boardToDeadPiecesList(board)
     if perspectiveWhite:
-        if len(deadPieces) != 0: # draw dead pieces if list is not empty
+        for piece in deadPieces:
+            piece:chess.Piece
+            if piece.color==chess.WHITE:
+                screen.blit(images.getImage(piece.symbol(),True), (whiteXOffset, round((HEIGHT/1000)*50)))
+                whiteXOffset+=round((WIDTH/1400)*50)
+            else:
+                screen.blit(images.getImage(piece.symbol(),True), (blackXOffset, round((HEIGHT/1000)*950)))
+                blackXOffset+=round((WIDTH/1400)*50)
+    #     if len(deadPieces) != 0: # draw dead pieces if list is not empty
 
-            # draw dead black pieces next to white players name
-            for i in range(deadPieces[9]): # draw black queen if dead
-                screen.blit(deadBLACKQUEENIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
-                blackXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[6]): # draw black rooks if dead
-                screen.blit(deadBLACKROOKIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
-                blackXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[8]): # draw black bishops if dead
-                screen.blit(deadBLACKBISHOPIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
-                blackXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[7]): # draw black knights if dead
-                screen.blit(deadBLACKKNIGHTIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
-                blackXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[11]): # draw black pawns if dead
-                screen.blit(deadBLACKPAWNIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
-                blackXOffset+=round((WIDTH/1400)*50)
+    #         # draw dead black pieces next to white players name
+    #         for i in range(deadPieces[9]): # draw black queen if dead
+    #             screen.blit(deadBLACKQUEENIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
+    #             blackXOffset+=round((WIDTH/1400)*50)
+    #         for i in range(deadPieces[6]): # draw black rooks if dead
+    #             screen.blit(deadBLACKROOKIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
+    #             blackXOffset+=round((WIDTH/1400)*50)
+    #         for i in range(deadPieces[8]): # draw black bishops if dead
+    #             screen.blit(deadBLACKBISHOPIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
+    #             blackXOffset+=round((WIDTH/1400)*50)
+    #         for i in range(deadPieces[7]): # draw black knights if dead
+    #             screen.blit(deadBLACKKNIGHTIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
+    #             blackXOffset+=round((WIDTH/1400)*50)
+    #         for i in range(deadPieces[11]): # draw black pawns if dead
+    #             screen.blit(deadBLACKPAWNIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
+    #             blackXOffset+=round((WIDTH/1400)*50)
 
-            # draw dead white pieces next to black players name
-            for i in range(deadPieces[3]): # draw white queen if dead
-                screen.blit(deadWHITEQUEENIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
-                whiteXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[0]): # draw white rooks if dead
-                screen.blit(deadWHITEROOKIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
-                whiteXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[2]): # draw white bishops if dead
-                screen.blit(deadWHITEBISHOPIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
-                whiteXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[1]): # draw white knights if dead
-                screen.blit(deadWHITEKNIGHTIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
-                whiteXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[5]): # draw white pawns if dead
-                screen.blit(deadWHITEPAWNIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
-                whiteXOffset+=round((WIDTH/1400)*50)
+    #         # draw dead white pieces next to black players name
+    #         for i in range(deadPieces[3]): # draw white queen if dead
+    #             screen.blit(deadWHITEQUEENIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
+    #             whiteXOffset+=round((WIDTH/1400)*50)
+    #         for i in range(deadPieces[0]): # draw white rooks if dead
+    #             screen.blit(deadWHITEROOKIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
+    #             whiteXOffset+=round((WIDTH/1400)*50)
+    #         for i in range(deadPieces[2]): # draw white bishops if dead
+    #             screen.blit(deadWHITEBISHOPIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
+    #             whiteXOffset+=round((WIDTH/1400)*50)
+    #         for i in range(deadPieces[1]): # draw white knights if dead
+    #             screen.blit(deadWHITEKNIGHTIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
+    #             whiteXOffset+=round((WIDTH/1400)*50)
+    #         for i in range(deadPieces[5]): # draw white pawns if dead
+    #             screen.blit(deadWHITEPAWNIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
+    #             whiteXOffset+=round((WIDTH/1400)*50)
 
         squareList = str(board).split()
         colCount = 0
