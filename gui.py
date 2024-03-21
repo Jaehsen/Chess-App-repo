@@ -32,7 +32,6 @@ fenList:list = [] # list of FEN strings for each move made on the board, used fo
 
 currentBestMove:list[str] = [] # list containing one string representing the current best move in uci notation. list needed for clear() function
 
-playername:str = "Jaysen"
 player2name:str = "Stockfish"
 
 DEFAULT_IMAGE_SIZE:tuple[int,int] = (round(WIDTH/14), round(HEIGHT/10))
@@ -66,7 +65,7 @@ deadWHITEQUEENIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('ima
 
 images=pieceImages.PieceImages(DEFAULT_IMAGE_SIZE,DEFAULT_SMALL_IMAGE_SIZE)
     
-def paint(board: chess.Board, currentScrollVal: int, perspectiveWhite: bool, playerWhite: bool):
+def paint(board: chess.Board, currentScrollVal: int, perspectiveWhite: bool, playerWhite: bool, playername: str):
     screen.fill(DARKSQUARE) # fill screen with color of dark squares
     for m in range(32):
         col = m % 4
@@ -458,7 +457,7 @@ def handlePromotionSelection(board: chess.Board, mouse: tuple, move: str, curren
             fenList.append(board.fen()) # append to fenList after player move made
         
         # update display
-        paint(board, currentScrollVal, perspectiveWhite, playerWhite)
+        paint(board, currentScrollVal, perspectiveWhite, playerWhite, name)
         pygame.display.flip()
 
         if not (board.is_checkmate() or board.is_stalemate()): # if not checkmate or stalemate make AI response move
@@ -537,7 +536,7 @@ def handleAttack(mouse: tuple, board: chess.Board, currentScrollVal: int, curren
                                     fenList.append(board.fen()) # append to fenList after player move made
                                     
                                     # update display
-                                    paint(board, currentScrollVal, perspectiveWhite, playerWhite)
+                                    paint(board, currentScrollVal, perspectiveWhite, playerWhite, name)
                                     pygame.display.flip()
 
                                     if not (board.is_checkmate() or board.is_stalemate()):
@@ -581,7 +580,7 @@ def handleAttack(mouse: tuple, board: chess.Board, currentScrollVal: int, curren
                                     fenList.append(board.fen()) # append to fenList after player move made
                                     
                                     # update display
-                                    paint(board, currentScrollVal, perspectiveWhite, playerWhite)
+                                    paint(board, currentScrollVal, perspectiveWhite, playerWhite, name)
                                     pygame.display.flip()
 
                                     if not (board.is_checkmate() or board.is_stalemate()):
@@ -629,7 +628,7 @@ def handleAttack(mouse: tuple, board: chess.Board, currentScrollVal: int, curren
                                     currentFenListIndex[0]+=1 # in place change on currentFenListIndex defined in main
 
                                     # update display
-                                    paint(board, currentScrollVal, perspectiveWhite, playerWhite)
+                                    paint(board, currentScrollVal, perspectiveWhite, playerWhite, name)
                                     pygame.display.flip()
 
 
@@ -665,7 +664,7 @@ def handleAttack(mouse: tuple, board: chess.Board, currentScrollVal: int, curren
                                     currentFenListIndex[0]+=1 # in place change on currentFenListIndex defined in main
 
                                     # update display
-                                    paint(board, currentScrollVal, perspectiveWhite, playerWhite)
+                                    paint(board, currentScrollVal, perspectiveWhite, playerWhite, name)
                                     pygame.display.flip()
 
 
@@ -712,6 +711,50 @@ def gameOver(board: chess.Board, checkMate: bool): # display checkmate popup
         screen.blit(big_font.render("Stalemate!", True, 'black'), (round((WIDTH/1400)*300), round((HEIGHT/1000)*450)))
     pygame.display.flip()
 
+def enterName():
+    enterName = False
+    user_text = ""
+    textBoxW = 500
+    textBoxH = round((HEIGHT/1000)*50)
+    textBoxL = (WIDTH / 2) - (textBoxW / 2)
+    textBoxT = (HEIGHT / 2) - (textBoxH / 2)
+
+    while not enterName:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_BACKSPACE: #Deletes the last letter from the user_text
+                    user_text = user_text[:-1]
+                elif event.key == pygame.K_RETURN: #Sets the user_text string as the player name and ends the loop
+                    if user_text == "":
+                        user_text = "Player"
+                    enterName = True
+                else:
+                    user_text += event.unicode #Adds whatever key was pressed to the user_text string
+            elif event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit(0)
+        
+        screen.fill(DARKSQUARE) #Background color
+        pygame.draw.rect(screen, 'black', pygame.Rect(textBoxL-5, textBoxT-5, textBoxW+10, textBoxH+10)) #Textbox outline
+        pygame.draw.rect(screen, (LIGHTSQUARE), pygame.Rect(textBoxL, textBoxT, textBoxW, textBoxH)) #Textbox
+        
+        nameText = big_font.render("Enter Player Name",True,'black') #Caption
+        nameTextRec = nameText.get_rect(center =(WIDTH /2, (HEIGHT / 2) - round((HEIGHT/1000)*50) - 5)) #Sets the location for the caption
+        screen.blit(nameText, nameTextRec) #Draws caption
+        
+        screen.blit(big_font.render(user_text,True,'black'), (textBoxL+5,textBoxT+5)) #Draws the current user text
+        
+        pygame.display.flip()
+
+        timer.tick(fps)
+
+    return user_text
+
+def record(n: str, b: bool):
+    f = open("PlayHistory.txt", "a")
+    f.write("\n{}\t\t{}".format(n, b))
+    f.close()
+
 
 def main(board: chess.Board):
     playerWhite = True # bool to represent the color of player for current game
@@ -721,11 +764,14 @@ def main(board: chess.Board):
     isPromotion = "" # isPromotion is a string that when empty indicates no pawn promotion to be selected and if full contains a length 5 string containing the uci for a promotion move
     UIresponse = "" # tracks which UI buttons have been clicked
     currentScrollVal = 0
+    global name
+    recorded = True
+    name = enterName()
+
     while board.is_game_over:
         timer.tick(fps)
         mouse = pygame.mouse.get_pos() # get mouse coordinates
-        paint(board, currentScrollVal, perspectiveWhite, playerWhite)
-        
+        paint(board, currentScrollVal, perspectiveWhite, playerWhite, name)
         
         if UIresponse == "hint" and not (board.is_checkmate() or board.is_stalemate()):
             drawHint(board, perspectiveWhite)
@@ -749,8 +795,14 @@ def main(board: chess.Board):
             drawPromotionSelection(playerWhite)
             
         if board.is_checkmate():
+            if recorded:
+                record(name, board.turn != chess.WHITE)
+                recorded = False
             gameOver(board,True)
         if board.is_stalemate():
+            if recorded:
+                record(name, board.turn != chess.WHITE)
+                recorded = False
             gameOver(board, False)
         if len(targetSquares) != 0:
             drawValidMoves(mouse,board,False, perspectiveWhite) # draws currently selected attack squares
