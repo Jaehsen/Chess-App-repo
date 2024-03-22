@@ -77,11 +77,11 @@ def paint(board: chess.Board, currentScrollVal: int, perspectiveWhite: bool, pla
         
         
         
-        pygame.draw.rect(screen, LIGHTSQUARE, [round(((WIDTH/1400)*800)), round((HEIGHT/1000)*100), round(((WIDTH/1400)*375)), round(((HEIGHT/1000)*800))]) # draw rect outlining move list
-        pygame.draw.line(screen, 'black', (0, round((HEIGHT/1000)*100) ), ( round((WIDTH/1400)*1175), round((HEIGHT/1000)*100) ), 4) # draw black outline for top of move list
+        pygame.draw.rect(screen, LIGHTSQUARE, [round(((WIDTH/1400)*800)), round((HEIGHT/1000)*100), round(((WIDTH/1400)*460)), round(((HEIGHT/1000)*800))]) # draw rect outlining move list
+        pygame.draw.line(screen, 'black', (0, round((HEIGHT/1000)*100) ), ( round((WIDTH/1400)*1260), round((HEIGHT/1000)*100) ), 4) # draw black outline for top of move list
         drawMoveList(board, currentScrollVal)
-        pygame.draw.line(screen, 'black', (0, round((HEIGHT/1000)*900)), (round((WIDTH/1400)*1175), round((HEIGHT/1000)*900) ), 4) # draw black outline for bottom of move list
-        pygame.draw.line(screen, 'black', (round((WIDTH/1400)*1175), 0), (round((WIDTH/1400)*1175), HEIGHT), 4) # draw black outline separating menu from move listing
+        pygame.draw.line(screen, 'black', (0, round((HEIGHT/1000)*900)), (round((WIDTH/1400)*1260), round((HEIGHT/1000)*900) ), 4) # draw black outline for bottom of move list
+        pygame.draw.line(screen, 'black', (round((WIDTH/1400)*1175), 0), (round((WIDTH/1400)*1260), HEIGHT), 4) # draw black outline separating menu from move listing
         pygame.draw.line(screen, 'black', (round((WIDTH/1400)*801), 0), (round((WIDTH/1400)*801), HEIGHT), 4) # draw black outline separating menu from game
 
 
@@ -110,6 +110,13 @@ def paint(board: chess.Board, currentScrollVal: int, perspectiveWhite: bool, pla
         pygame.draw.rect(screen, (0,0,0), [round((WIDTH/1400)*1080), round((HEIGHT/1000)*910), round((WIDTH/1400)*85), round((HEIGHT/1000)*85)])  
         pygame.draw.rect(screen, LIGHTSQUARE, [round((WIDTH/1400)*1085), round((HEIGHT/1000)*915), round((WIDTH/1400)*75), round((HEIGHT/1000)*75)])
         screen.blit(font.render("HINT", True, 'black'), (round((WIDTH/1400)*1099), round((HEIGHT/1000)*940)))
+
+        # draw get help button
+        pygame.draw.rect(screen, (0,0,0), [round((WIDTH/1400)*1170), round((HEIGHT/1000)*910), round((WIDTH/1400)*85), round((HEIGHT/1000)*85)])  
+        pygame.draw.rect(screen, LIGHTSQUARE, [round((WIDTH/1400)*1175), round((HEIGHT/1000)*915), round((WIDTH/1400)*75), round((HEIGHT/1000)*75)])
+        screen.blit(font.render("GET", True, 'black'), (round((WIDTH/1400)*1192), round((HEIGHT/1000)*935)))
+        screen.blit(font.render("HELP", True, 'black'), (round((WIDTH/1400)*1187), round((HEIGHT/1000)*955)))
+        
         if playerWhite:
             if perspectiveWhite:
                 screen.blit(big_font.render(f"Player: {playername}", True, 'black'), (round((WIDTH/1400)*10), round((HEIGHT/1000)*905)))
@@ -382,6 +389,24 @@ def drawHint(board: chess.Board, perspectiveWhite: bool): # best move contains z
         pygame.draw.circle(screen, (255,1,1), ((7-cl)*((WIDTH/1400)*100)+((WIDTH/1400)*50), ((HEIGHT/1000)*850)-(7-rw)*((HEIGHT/1000)*100)), 10)
         pygame.draw.circle(screen, (0,255,0), ((7-ocl)*round((WIDTH/1400)*100)+round((WIDTH/1400)*50), round((HEIGHT/1000)*850)-(7-orw)*round((HEIGHT/1000)*100)), 10)
 
+# getHelp function that is used when getHelp button is clicked
+def getHelp(board: chess.Board):
+     pygame.draw.rect(screen, DARKSQUARE, [round(((WIDTH/1400)*825)), round((HEIGHT/1000)*400), round(((WIDTH/1400)*410)), round(((HEIGHT/1000)*475))])
+     screen.blit(font.render("Instructions:", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*410)))
+     screen.blit(font.render("Click on a piece to see the possible moves ", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*430)))
+     screen.blit(font.render("for it marked with a red circle.", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*450)))
+     screen.blit(font.render("Move descriptions:", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*500)))
+     screen.blit(font.render("Pawn: one square forward, or two squares", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*520)))
+     screen.blit(font.render("            on first move. Captures diagonally", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*540)))
+     screen.blit(font.render("Bishop: any number of squares diagonally", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*580)))
+     screen.blit(font.render("Knight: 'L' shape, two squares forward", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*620)))
+     screen.blit(font.render("               and one perpendicular", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*640)))
+     screen.blit(font.render("Rook: any amount of squares horizontally", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*680)))
+     screen.blit(font.render("           or vertically", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*700)))
+     screen.blit(font.render("Queen: any amount of squares in all", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*740)))
+     screen.blit(font.render("              directions", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*760)))
+     screen.blit(font.render("King: one square in all directions", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*800)))
+
 def handleUIclicks(board, mouse: tuple, currentFenListIndex: list) -> str:
     if round((WIDTH/1400)*815) <= mouse[0] <= round((WIDTH/1400)*890) and round((HEIGHT/1000)*915) <= mouse[1] <= round((HEIGHT/1000)*990): # clicked on new game button
         board.reset()
@@ -416,6 +441,8 @@ def handleUIclicks(board, mouse: tuple, currentFenListIndex: list) -> str:
         targetSquares.clear()
         legalMovesForSquare.clear()
         return "hint"
+    elif round((WIDTH/1400)*1175) <= mouse[0] <= round((WIDTH/1400)*1250) and round((HEIGHT/1000)*915) <= mouse[1] <= round((HEIGHT/1000)*990): # clicked on get help button
+        return "getHelp"
     return ""
 
 def handlePromotionSelection(board: chess.Board, mouse: tuple, move: str, currentFenListIndex: list, currentScrollVal: int, perspectiveWhite: bool, playerWhite: bool) -> str: # returns empty string when promotion selection has been made to update isPromotion variable in main()
@@ -787,6 +814,8 @@ def main(board: chess.Board):
                 playerWhite = False
                 perspectiveWhite = False
             UIresponse = ""
+        elif UIresponse == "getHelp":
+            getHelp(board)
 
         if not playerWhite:
             makeAImove(board, currentFenListIndex)
