@@ -81,7 +81,7 @@ def paint(board: chess.Board, currentScrollVal: int, perspectiveWhite: bool, pla
         pygame.draw.line(screen, 'black', (0, round((HEIGHT/1000)*100) ), ( round((WIDTH/1400)*1260), round((HEIGHT/1000)*100) ), 4) # draw black outline for top of move list
         drawMoveList(board, currentScrollVal)
         pygame.draw.line(screen, 'black', (0, round((HEIGHT/1000)*900)), (round((WIDTH/1400)*1260), round((HEIGHT/1000)*900) ), 4) # draw black outline for bottom of move list
-        pygame.draw.line(screen, 'black', (round((WIDTH/1400)*1175), 0), (round((WIDTH/1400)*1260), HEIGHT), 4) # draw black outline separating menu from move listing
+        pygame.draw.line(screen, 'black', (round((WIDTH/1400)*1260), 0), (round((WIDTH/1400)*1260), HEIGHT), 4) # draw black outline separating menu from move listing
         pygame.draw.line(screen, 'black', (round((WIDTH/1400)*801), 0), (round((WIDTH/1400)*801), HEIGHT), 4) # draw black outline separating menu from game
 
 
