@@ -147,24 +147,27 @@ def drawPieces(board: chess.Board, perspectiveWhite: bool) -> None:
     blackXOffset = round((WIDTH/1400)*10)
     whiteXOffset = round((WIDTH/1400)*10)
 
-    # if perspectiveWhite:
+    #draw dead pieces
     for piece in deadPieces:
         piece:chess.Piece
         if (piece.color==chess.WHITE and perspectiveWhite) or (piece.color==chess.BLACK and not(perspectiveWhite)):
+            #pieces at the top of the board
             screen.blit(images.getImage(piece.symbol(),True), (whiteXOffset, round((HEIGHT/1000)*50)))
             whiteXOffset+=round((WIDTH/1400)*50)
         else:
+            #pieces at the bottom of the board
             screen.blit(images.getImage(piece.symbol(),True), (blackXOffset, round((HEIGHT/1000)*950)))
             blackXOffset+=round((WIDTH/1400)*50)
 
+    #draw the pieces on the board
     squareList = str(board).split()
     colCount = 0
     rowCount = 0
-    if not(perspectiveWhite):
+    if not(perspectiveWhite): #reversing the board will flip the perspecitve
         squareList.reverse()
     for square in squareList:
         tmp_image:pygame.Surface=images.getImage(square)
-        if tmp_image.get_flags!=-1:
+        if tmp_image.get_flags!=-1: # if the flag is set to -1 then it is an empty/unknown square
             screen.blit(tmp_image,(colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100))
         colCount+=1
         if colCount == 8:
@@ -172,6 +175,7 @@ def drawPieces(board: chess.Board, perspectiveWhite: bool) -> None:
             rowCount+=1
 
 def drawValidMoves(mouse: tuple, board: chess.Board, clicked: bool, perspectiveWhite: bool): # draws valid moves on screen when square is clicked
+    
     if perspectiveWhite:
         rowNum = 8
         for row in range(0,8): # loop through all squares to find which one was clicked on
