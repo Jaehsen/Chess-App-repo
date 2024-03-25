@@ -1,3 +1,6 @@
+"""
+This module contains the gui functions and the main of the application
+"""
 import pygame
 import chess
 import chessApp
@@ -66,6 +69,18 @@ deadWHITEQUEENIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('ima
 images=pieceImages.PieceImages(DEFAULT_IMAGE_SIZE,DEFAULT_SMALL_IMAGE_SIZE)
     
 def paint(board: chess.Board, currentScrollVal: int, perspectiveWhite: bool, playerWhite: bool, playername: str):
+    """
+    Creates the game window.
+
+    Args:
+        board (chess.Board): The board of the currant game state.
+        currentScrollVal (int): the scroll value which is used for drawMoveList().
+        perspectiveWhite (bool): determine if white should be on the top or bottom of the board.
+        playerWhite (bool): used to determine if the player is white.
+        playerName (str): The string representing the player's name. 
+    Returns: 
+        None
+    """   
     screen.fill(DARKSQUARE) # fill screen with color of dark squares
     for m in range(32):
         col = m % 4
@@ -140,9 +155,16 @@ def paint(board: chess.Board, currentScrollVal: int, perspectiveWhite: bool, pla
         drawPieces(board, perspectiveWhite)
 
 def drawPieces(board: chess.Board, perspectiveWhite: bool) -> None: 
-    """draw pieces on board in positons specified by board object. 
-    perspectiveWhite is a boolean that will determine the perspective of the board."""
-    
+    """
+    Creates the piece images on the inital board.
+
+    Args:
+        board (chess.Board): The board of the currant game state.
+        perspectiveWhite (bool): determine if white should be on the top or bottom of the board.
+
+    Returns:
+        None.
+    """
     deadPieces=chessApp.getDeadPieces(board)
     blackXOffset = round((WIDTH/1400)*10)
     whiteXOffset = round((WIDTH/1400)*10)
@@ -175,7 +197,18 @@ def drawPieces(board: chess.Board, perspectiveWhite: bool) -> None:
             rowCount+=1
 
 def drawValidMoves(mouse: tuple, board: chess.Board, clicked: bool, perspectiveWhite: bool): # draws valid moves on screen when square is clicked
-    
+    """
+    Draws valid moves on screen based a piece is selected.
+
+    Args:
+        mouse (tuple): pos of the mouse represented as an X,Y coordinate. 
+        board (chess.Board): The board of the currant game state.
+        clicked (bool): determine if an piece has been clicked.
+        perspectiveWhite (bool): determine if white should be on the top or bottom of the board.
+        
+    Returns:
+        None
+    """    
     if perspectiveWhite:
         rowNum = 8
         for row in range(0,8): # loop through all squares to find which one was clicked on
@@ -240,6 +273,16 @@ def drawValidMoves(mouse: tuple, board: chess.Board, clicked: bool, perspectiveW
             pygame.draw.circle(screen, (255,1,1), (coord[0], coord[1]), 10)
 
 def drawHint(board: chess.Board, perspectiveWhite: bool): # best move contains zero or 1 string at all times
+    """
+    Gives the best move as a hint to the player.
+
+    Args:
+        board (chess.Board): The board of the currant game state.
+        perspectiveWhite (bool): determine if white should be on the top or bottom of the board.
+    
+    returns:
+        None
+    """    
     if perspectiveWhite:
         bm = currentBestMove[0]
         originSq = bm[:2]
@@ -263,23 +306,42 @@ def drawHint(board: chess.Board, perspectiveWhite: bool): # best move contains z
 
 # getHelp function that is used when getHelp button is clicked
 def getHelp(board: chess.Board):
-     pygame.draw.rect(screen, DARKSQUARE, [round(((WIDTH/1400)*825)), round((HEIGHT/1000)*400), round(((WIDTH/1400)*410)), round(((HEIGHT/1000)*475))])
-     screen.blit(font.render("Instructions:", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*410)))
-     screen.blit(font.render("Click on a piece to see the possible moves ", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*430)))
-     screen.blit(font.render("for it marked with a red circle.", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*450)))
-     screen.blit(font.render("Move descriptions:", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*500)))
-     screen.blit(font.render("Pawn: one square forward, or two squares", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*520)))
-     screen.blit(font.render("            on first move. Captures diagonally", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*540)))
-     screen.blit(font.render("Bishop: any number of squares diagonally", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*580)))
-     screen.blit(font.render("Knight: 'L' shape, two squares forward", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*620)))
-     screen.blit(font.render("               and one perpendicular", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*640)))
-     screen.blit(font.render("Rook: any amount of squares horizontally", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*680)))
-     screen.blit(font.render("           or vertically", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*700)))
-     screen.blit(font.render("Queen: any amount of squares in all", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*740)))
-     screen.blit(font.render("              directions", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*760)))
-     screen.blit(font.render("King: one square in all directions", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*800)))
+    """
+    Creates a window with the basic information of chess.
 
-def handleUIclicks(board, mouse: tuple, currentFenListIndex: list) -> str:
+    Args:
+       board (chess.Board): The board of the currant game state.
+    Returns:
+        None
+    """    
+    pygame.draw.rect(screen, DARKSQUARE, [round(((WIDTH/1400)*825)), round((HEIGHT/1000)*400), round(((WIDTH/1400)*410)), round(((HEIGHT/1000)*475))])
+    screen.blit(font.render("Instructions:", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*410)))
+    screen.blit(font.render("Click on a piece to see the possible moves ", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*430)))
+    screen.blit(font.render("for it marked with a red circle.", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*450)))
+    screen.blit(font.render("Move descriptions:", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*500)))
+    screen.blit(font.render("Pawn: one square forward, or two squares", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*520)))
+    screen.blit(font.render("            on first move. Captures diagonally", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*540)))
+    screen.blit(font.render("Bishop: any number of squares diagonally", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*580)))
+    screen.blit(font.render("Knight: 'L' shape, two squares forward", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*620)))
+    screen.blit(font.render("               and one perpendicular", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*640)))
+    screen.blit(font.render("Rook: any amount of squares horizontally", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*680)))
+    screen.blit(font.render("           or vertically", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*700)))
+    screen.blit(font.render("Queen: any amount of squares in all", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*740)))
+    screen.blit(font.render("              directions", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*760)))
+    screen.blit(font.render("King: one square in all directions", True, 'black'), (round((WIDTH/1400)*830), round((HEIGHT/1000)*800)))
+
+def handleUIclicks(board: chess.Board, mouse: tuple, currentFenListIndex: list) -> str:
+    """
+    Determines what should happen, if any, when a click occurs.
+
+    Args:
+        board (chess.Board): The board of the currant game state.
+        mouse (tuple): pos of the mouse represented as an X,Y coordinate.
+        currentFenListIndex (List): a list used for keeping track of positions in the fenList.
+        
+    Returns:
+        Str: string which represents the given event.
+    """    
     if round((WIDTH/1400)*815) <= mouse[0] <= round((WIDTH/1400)*890) and round((HEIGHT/1000)*915) <= mouse[1] <= round((HEIGHT/1000)*990): # clicked on new game button
         board.reset()
         board.clear_stack()
@@ -317,11 +379,24 @@ def handleUIclicks(board, mouse: tuple, currentFenListIndex: list) -> str:
         return "getHelp"
     return ""
 
-def handlePromotionSelection(board: chess.Board, mouse: tuple, move: str, currentFenListIndex: list, currentScrollVal: int, perspectiveWhite: bool, playerWhite: bool) -> str: # returns empty string when promotion selection has been made to update isPromotion variable in main()
-    
-    
-    if round((WIDTH/1400)*200) <= mouse[0] <= round((WIDTH/1400)*600) and  round((HEIGHT/1000)*400) <= mouse[1] <= round((HEIGHT/1000)*500): # if click in selection box
+def handlePromotionSelection(board: chess.Board, mouse: tuple, move: str, currentFenListIndex: list,
+                              currentScrollVal: int, perspectiveWhite: bool, playerWhite: bool) -> str: 
+    """
+    Promotes a pawn to a given promoted piece
+.
+    Args:
+        board (chess.Board): The board of the currant game state.
+        mouse (tuple): pos of the mouse represented as an X,Y coordinate.
+        move (str): The UCI representation of where the promotate occurs. 
+        currentFenListIndex (List): a list used for keeping track of positions in the fenList.
+        currentScrollVal (int): the scroll value which is used for drawMoveList().
+        perspectiveWhite (bool): determine if white should be on the top or bottom of the board.
+        playerWhite (bool): used to determine if the player is white.
 
+    Returns:
+        Str: Empty string when promotion selection has been made to update isPromotion variable in main()
+    """
+    if round((WIDTH/1400)*200) <= mouse[0] <= round((WIDTH/1400)*600) and  round((HEIGHT/1000)*400) <= mouse[1] <= round((HEIGHT/1000)*500): # if click in selection box
         if round((WIDTH/1400)*200) <= mouse[0] <= round((WIDTH/1400)*300) and  round((HEIGHT/1000)*400) <= mouse[1] <= round((HEIGHT/1000)*500): # click in queen box
 
             mv = move[:4]+"q"
@@ -329,24 +404,21 @@ def handlePromotionSelection(board: chess.Board, mouse: tuple, move: str, curren
             moveList.append(board.san(board.parse_uci(mv)))
             currentFenListIndex[0]+=1 # in place change on currentFenListIndex defined in main
             board.push_uci(mv) # make player move
-            fenList.append(board.fen()) # append to fenList after player move made
-        
+            fenList.append(board.fen()) # append to fenList after player move made 
         elif round((WIDTH/1400)*300) <= mouse[0] <= round((WIDTH/1400)*400) and  round((HEIGHT/1000)*400) <= mouse[1] <= round((HEIGHT/1000)*500): # click in rook box
             mv = move[:4]+"r"
             fenList.append(board.fen()) # append to fenList before player move made
             moveList.append(board.san(board.parse_uci(mv)))
             currentFenListIndex[0]+=1 # in place change on currentFenListIndex defined in main
             board.push_uci(mv) # make player move
-            fenList.append(board.fen()) # append to fenList after player move made
-            
+            fenList.append(board.fen()) # append to fenList after player move made           
         elif round((WIDTH/1400)*400) <= mouse[0] <= round((WIDTH/1400)*500) and  round((HEIGHT/1000)*400) <= mouse[1] <= round((HEIGHT/1000)*500): # click in bishop box
             mv = move[:4]+"b"
             fenList.append(board.fen()) # append to fenList before player move made
             moveList.append(board.san(board.parse_uci(mv)))
             currentFenListIndex[0]+=1 # in place change on currentFenListIndex defined in main
             board.push_uci(mv) # make player move
-            fenList.append(board.fen()) # append to fenList after player move made
-            
+            fenList.append(board.fen()) # append to fenList after player move made            
         elif round((WIDTH/1400)*500) <= mouse[0] <= round((WIDTH/1400)*600) and  round((HEIGHT/1000)*400) <= mouse[1] <= round((HEIGHT/1000)*500): # click in knight box
             mv = move[:4]+"n"
             fenList.append(board.fen()) # append to fenList before player move made
@@ -354,7 +426,6 @@ def handlePromotionSelection(board: chess.Board, mouse: tuple, move: str, curren
             currentFenListIndex[0]+=1 # in place change on currentFenListIndex defined in main
             board.push_uci(mv) # make player move
             fenList.append(board.fen()) # append to fenList after player move made
-        
         # update display
         paint(board, currentScrollVal, perspectiveWhite, playerWhite, name)
         pygame.display.flip()
@@ -366,18 +437,25 @@ def handlePromotionSelection(board: chess.Board, mouse: tuple, move: str, curren
             board.push_uci(aiMove) # make move for AI
 
             fenList.append(board.fen())# append to fenList before AI move made
-            currentFenListIndex[0]+=1 # in place change on currentFenListIndex defined in main
-                            
+            currentFenListIndex[0]+=1 # in place change on currentFenListIndex defined in main                            
         legalMovesForSquare.clear()
         targetSquares.clear()
         coords.clear()
-
         currentBestMove.clear()
         currentBestMove.append(AI.bestMove(board))
         return ""
     return move
 
 def drawPromotionSelection(playerWhite: bool):
+    """
+    Handles the graphical aspect of promoting a pawn.
+
+    Args:
+        playerWhite (bool): used to determine if the player is white.
+
+    Returns:
+        None
+    """
     # draw box
     pygame.draw.rect(screen, (0,0,0), [round((WIDTH/1400)*195), round((HEIGHT/1000)*395), round((WIDTH/1400)*410), round((HEIGHT/1000)*110)])
     pygame.draw.rect(screen, LIGHTSQUARE, [round((WIDTH/1400)*200), round((HEIGHT/1000)*400), round((WIDTH/1400)*400), round((HEIGHT/1000)*100)])
@@ -404,6 +482,16 @@ def drawPromotionSelection(playerWhite: bool):
         screen.blit(BLACKKNIGHTIMAGE, (round((WIDTH/1400)*495), round((HEIGHT/1000)*395)) )
 
 def makeAImove(board: chess.Board, currentFenListIndex: list):
+    """
+    Handles the coputors move and related information.
+    
+    Args:
+        board (chess.Board): The board of the currant game state. 
+        currentFenListIndex (List): a list used for keeping track of positions in the fenList.
+
+    Returns:
+        None.
+    """    
     if (not (board.is_checkmate() or board.is_stalemate())) and board.turn == chess.WHITE:
             aiMove = AI.getMove(board, 1)  # AI difficulty at 1/20
             moveList.append(board.san(board.parse_uci(aiMove)))
@@ -415,7 +503,22 @@ def makeAImove(board: chess.Board, currentFenListIndex: list):
             currentBestMove.clear()
             currentBestMove.append(AI.bestMove(board))
 
-def handleAttack(mouse: tuple, board: chess.Board, currentScrollVal: int, currentFenListIndex: list, perspectiveWhite: bool, playerWhite: bool) -> str: # handles mouse events where attack square is clicked and returns uci move if clicked move was a promotion else retruns empty string
+def handleAttack(mouse: tuple, board: chess.Board, currentScrollVal: int,
+                  currentFenListIndex: list, perspectiveWhite: bool, playerWhite: bool) -> str: 
+    """
+    Handles mouse events where attack square is clicked and returns uci move if clicked move was a promotion else returns empty string.
+
+    Args:
+        board (chess.Board): The board of the currant game state.
+        mouse (tuple): pos of the mouse represented as an X,Y coordinate.
+        currentFenListIndex (List): a list used for keeping track of positions in the fenList.
+        currentScrollVal (int): the scroll value which is used for drawMoveList().
+        perspectiveWhite (bool): determine if white should be on the top or bottom of the board.
+        playerWhite (bool): used to determine if the player is white.
+
+    Returns:
+        Str: either the move in UCI or an empty string.
+    """    
     if playerWhite:
         if perspectiveWhite:
             rowNum = 8
@@ -581,6 +684,16 @@ def handleAttack(mouse: tuple, board: chess.Board, currentScrollVal: int, curren
 
 
 def drawMoveList(board: chess.Board, currentScrollVal):
+    """
+    Draws the record of previous moves besides the board
+
+    Args:
+        board (chess.Board): The board of the currant game state.
+        currentScrollVal (int): the scroll value which is used for drawMoveList().
+
+    Returns:
+        None.
+    """    
     moveSurface = pygame.Surface((round((WIDTH/1400)*335), round((HEIGHT/1000)*4000)))
     moveSurface.fill(LIGHTSQUARE)
     yOffset = 0
@@ -601,7 +714,17 @@ def drawMoveList(board: chess.Board, currentScrollVal):
     screen.blit(moveSurface,(round((WIDTH/1400)*820), round((HEIGHT/1000)*120)))
 
 
-def gameOver(board: chess.Board, checkMate: bool): # display checkmate popup
+def gameOver(board: chess.Board, checkMate: bool):
+    """
+    Handles the display of the checkmate/stalemate popup
+
+    Args:
+        board (chess.Board): The board of the currant game state.
+        checkMate (bool): used to determine if the game has ended in a checkmate or a stalemate
+
+    Returns:
+        None.
+    """    
     pygame.draw.rect(screen, (0,0,0), [round((WIDTH/1400)*250), round((HEIGHT/1000)*425), round((WIDTH/1400)*300), round((HEIGHT/1000)*90)])
     pygame.draw.rect(screen, LIGHTSQUARE, [round((WIDTH/1400)*255), round((HEIGHT/1000)*430), round((WIDTH/1400)*290), round((HEIGHT/1000)*80)])
     if checkMate:
@@ -611,6 +734,15 @@ def gameOver(board: chess.Board, checkMate: bool): # display checkmate popup
     pygame.display.flip()
 
 def enterName():
+    """
+    Allows the user to select their name.
+
+    Args:
+        None.
+
+    Returns:
+        Str: The username of the player.
+    """    
     enterName = False
     user_text = ""
     textBoxW = 500
@@ -650,6 +782,16 @@ def enterName():
     return user_text
 
 def record(n: str, b: bool):
+    """
+    Creates a record in PlayHistory.txt.
+
+    Args:
+        n (str): the username of the player
+        b (bool): boolean to determine who won the game
+
+    Returns:
+        None.
+    """
     f = open("PlayHistory.txt", "a")
     f.write("\n{}\t\t{}".format(n, b))
     f.close()

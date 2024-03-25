@@ -5,7 +5,6 @@ import os
 
 class PieceImages:
     def __init__(self,DEFAULT_IMAGE_SIZE:int,DEFAULT_SMALL_IMAGE_SIZE:int):
-        #print(DEFAULT_IMAGE_SIZE,DEFAULT_SMALL_IMAGE_SIZE)
         self.BLACKPAWNIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'black-bpawn.png')).convert_alpha(), DEFAULT_IMAGE_SIZE)
         self.BLACKROOKIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'black-rook.png')).convert_alpha(), DEFAULT_IMAGE_SIZE)
         self.BLACKKNIGHTIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'black-knight.png')).convert_alpha(), DEFAULT_IMAGE_SIZE)
@@ -32,9 +31,18 @@ class PieceImages:
         self.deadWHITEBISHOPIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'white-bishop.png')).convert_alpha(), DEFAULT_SMALL_IMAGE_SIZE)
         self.deadWHITEQUEENIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'white-queen.png')).convert_alpha(), DEFAULT_SMALL_IMAGE_SIZE)
 
-    def getImage(self,piece:str,small:bool=False) -> pygame.surface:
-        """Get an image of a peice based off of it's respective string. For example, 'q' will return a queen image. The small boolean will make the resulting image the small version."""
-        #print(piece,small,self.deadBLACKPAWNIMAGE.get_height(),self.BLACKPAWNIMAGE.get_height())
+    def getImage(self, piece:str, small:bool=False) -> pygame.surface:
+        """
+        Get an image of a peice based off of it's respective string. 
+        For example, 'q' will return a queen image. The small boolean will make the resulting image the small version.
+
+        Args:
+            piece (Str): a string for the chess piece.
+            small (bool): determines if a piece is the small version.
+        Returns:
+            pygame.Surface: The image of a given chess piece. 
+
+        """
         if small:
             if piece=="p":
                 return self.deadBLACKPAWNIMAGE
