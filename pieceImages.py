@@ -5,7 +5,7 @@ import os
 
 class PieceImages:
     def __init__(self,DEFAULT_IMAGE_SIZE:int,DEFAULT_SMALL_IMAGE_SIZE:int):
-        print(DEFAULT_IMAGE_SIZE,DEFAULT_SMALL_IMAGE_SIZE)
+        #print(DEFAULT_IMAGE_SIZE,DEFAULT_SMALL_IMAGE_SIZE)
         self.BLACKPAWNIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'black-bpawn.png')).convert_alpha(), DEFAULT_IMAGE_SIZE)
         self.BLACKROOKIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'black-rook.png')).convert_alpha(), DEFAULT_IMAGE_SIZE)
         self.BLACKKNIGHTIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'black-knight.png')).convert_alpha(), DEFAULT_IMAGE_SIZE)
@@ -32,7 +32,7 @@ class PieceImages:
         self.deadWHITEBISHOPIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'white-bishop.png')).convert_alpha(), DEFAULT_SMALL_IMAGE_SIZE)
         self.deadWHITEQUEENIMAGE = pygame.transform.scale(pygame.image.load(os.path.join('images', 'white-queen.png')).convert_alpha(), DEFAULT_SMALL_IMAGE_SIZE)
 
-    def getImage(self,piece:str,small:bool) -> pygame.surface:
+    def getImage(self,piece:str,small:bool=False) -> pygame.surface:
         """Get an image of a peice based off of it's respective string. For example, 'q' will return a queen image. The small boolean will make the resulting image the small version."""
         #print(piece,small,self.deadBLACKPAWNIMAGE.get_height(),self.BLACKPAWNIMAGE.get_height())
         if small:
@@ -67,15 +67,19 @@ class PieceImages:
             return self.BLACKROOKIMAGE
         if piece=="q":
             return self.BLACKQUEENIMAGE
+        if piece=="k":
+            return self.BLACKKINGIMAGE
         if piece=="P":
-            return self.BLACKPAWNIMAGE
+            return self.WHITEPAWNIMAGE
         if piece=="N":
-            return self.BLACKKNIGHTIMAGE
+            return self.WHITEKNIGHTIMAGE
         if piece=="B":
-            return self.BLACKBISHOPIMAGE
+            return self.WHITEBISHOPIMAGE
         if piece=="R":
-            return self.BLACKROOKIMAGE
+            return self.WHITEROOKIMAGE
         if piece=="Q":
-            return self.BLACKQUEENIMAGE
-        return pygame.surface.Surface((4,4))
+            return self.WHITEQUEENIMAGE
+        if piece=="K":
+            return self.WHITEKINGIMAGE
+        return pygame.surface.Surface((4,4),flags=-1)
     

@@ -139,169 +139,37 @@ def paint(board: chess.Board, currentScrollVal: int, perspectiveWhite: bool, pla
 
         drawPieces(board, perspectiveWhite)
 
-def drawPieces(board: chess.Board, perspectiveWhite: bool): # draw pieces on board in positons specified by board object
+def drawPieces(board: chess.Board, perspectiveWhite: bool) -> None: 
+    """draw pieces on board in positons specified by board object. 
+    perspectiveWhite is a boolean that will determine the perspective of the board."""
+    
     deadPieces=chessApp.getDeadPieces(board)
     blackXOffset = round((WIDTH/1400)*10)
     whiteXOffset = round((WIDTH/1400)*10)
-    # deadPieces = chessApp.boardToDeadPiecesList(board)
-    if perspectiveWhite:
-        for piece in deadPieces:
-            piece:chess.Piece
-            if piece.color==chess.WHITE:
-                screen.blit(images.getImage(piece.symbol(),True), (whiteXOffset, round((HEIGHT/1000)*50)))
-                whiteXOffset+=round((WIDTH/1400)*50)
-            else:
-                screen.blit(images.getImage(piece.symbol(),True), (blackXOffset, round((HEIGHT/1000)*950)))
-                blackXOffset+=round((WIDTH/1400)*50)
-    #     if len(deadPieces) != 0: # draw dead pieces if list is not empty
 
-    #         # draw dead black pieces next to white players name
-    #         for i in range(deadPieces[9]): # draw black queen if dead
-    #             screen.blit(deadBLACKQUEENIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
-    #             blackXOffset+=round((WIDTH/1400)*50)
-    #         for i in range(deadPieces[6]): # draw black rooks if dead
-    #             screen.blit(deadBLACKROOKIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
-    #             blackXOffset+=round((WIDTH/1400)*50)
-    #         for i in range(deadPieces[8]): # draw black bishops if dead
-    #             screen.blit(deadBLACKBISHOPIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
-    #             blackXOffset+=round((WIDTH/1400)*50)
-    #         for i in range(deadPieces[7]): # draw black knights if dead
-    #             screen.blit(deadBLACKKNIGHTIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
-    #             blackXOffset+=round((WIDTH/1400)*50)
-    #         for i in range(deadPieces[11]): # draw black pawns if dead
-    #             screen.blit(deadBLACKPAWNIMAGE, (blackXOffset, round((HEIGHT/1000)*950)))
-    #             blackXOffset+=round((WIDTH/1400)*50)
+    # if perspectiveWhite:
+    for piece in deadPieces:
+        piece:chess.Piece
+        if (piece.color==chess.WHITE and perspectiveWhite) or (piece.color==chess.BLACK and not(perspectiveWhite)):
+            screen.blit(images.getImage(piece.symbol(),True), (whiteXOffset, round((HEIGHT/1000)*50)))
+            whiteXOffset+=round((WIDTH/1400)*50)
+        else:
+            screen.blit(images.getImage(piece.symbol(),True), (blackXOffset, round((HEIGHT/1000)*950)))
+            blackXOffset+=round((WIDTH/1400)*50)
 
-    #         # draw dead white pieces next to black players name
-    #         for i in range(deadPieces[3]): # draw white queen if dead
-    #             screen.blit(deadWHITEQUEENIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
-    #             whiteXOffset+=round((WIDTH/1400)*50)
-    #         for i in range(deadPieces[0]): # draw white rooks if dead
-    #             screen.blit(deadWHITEROOKIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
-    #             whiteXOffset+=round((WIDTH/1400)*50)
-    #         for i in range(deadPieces[2]): # draw white bishops if dead
-    #             screen.blit(deadWHITEBISHOPIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
-    #             whiteXOffset+=round((WIDTH/1400)*50)
-    #         for i in range(deadPieces[1]): # draw white knights if dead
-    #             screen.blit(deadWHITEKNIGHTIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
-    #             whiteXOffset+=round((WIDTH/1400)*50)
-    #         for i in range(deadPieces[5]): # draw white pawns if dead
-    #             screen.blit(deadWHITEPAWNIMAGE, (whiteXOffset, round((HEIGHT/1000)*50)))
-    #             whiteXOffset+=round((WIDTH/1400)*50)
-
-        squareList = str(board).split()
-        colCount = 0
-        rowCount = 0
-        for square in squareList:
-            # black pieces
-            if square == 'r':
-                screen.blit(BLACKROOKIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'n':
-                screen.blit(BLACKKNIGHTIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'b':
-                screen.blit(BLACKBISHOPIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'k':
-                screen.blit(BLACKKINGIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'q':
-                screen.blit(BLACKQUEENIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'p':
-                screen.blit(BLACKPAWNIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            # white pieces
-            elif square == 'R':
-                screen.blit(WHITEROOKIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'N':
-                screen.blit(WHITEKNIGHTIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'B':
-                screen.blit(WHITEBISHOPIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'K':
-                screen.blit(WHITEKINGIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'Q':
-                screen.blit(WHITEQUEENIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'P':
-                screen.blit(WHITEPAWNIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            
-            
-
-            colCount+=1
-            if colCount == 8:
-                colCount = 0
-                rowCount+=1
-    
-    else: # persepctive is from black
-
-        if len(deadPieces) != 0: # draw dead pieces if list is not empty
-
-            # draw dead black pieces next to white players name
-            for i in range(deadPieces[9]): # draw black queen if dead
-                screen.blit(deadBLACKQUEENIMAGE, (blackXOffset, round((HEIGHT/1000)*50)))
-                blackXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[6]): # draw black rooks if dead
-                screen.blit(deadBLACKROOKIMAGE, (blackXOffset, round((HEIGHT/1000)*50)))
-                blackXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[8]): # draw black bishops if dead
-                screen.blit(deadBLACKBISHOPIMAGE, (blackXOffset, round((HEIGHT/1000)*50)))
-                blackXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[7]): # draw black knights if dead
-                screen.blit(deadBLACKKNIGHTIMAGE, (blackXOffset, round((HEIGHT/1000)*50)))
-                blackXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[11]): # draw black pawns if dead
-                screen.blit(deadBLACKPAWNIMAGE, (blackXOffset, round((HEIGHT/1000)*50)))
-                blackXOffset+=round((WIDTH/1400)*50)
-
-            # draw dead white pieces next to black players name
-            for i in range(deadPieces[3]): # draw white queen if dead
-                screen.blit(deadWHITEQUEENIMAGE, (whiteXOffset, round((HEIGHT/1000)*950)))
-                whiteXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[0]): # draw white rooks if dead
-                screen.blit(deadWHITEROOKIMAGE, (whiteXOffset, round((HEIGHT/1000)*950)))
-                whiteXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[2]): # draw white bishops if dead
-                screen.blit(deadWHITEBISHOPIMAGE, (whiteXOffset, round((HEIGHT/1000)*950)))
-                whiteXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[1]): # draw white knights if dead
-                screen.blit(deadWHITEKNIGHTIMAGE, (whiteXOffset, round((HEIGHT/1000)*950)))
-                whiteXOffset+=round((WIDTH/1400)*50)
-            for i in range(deadPieces[5]): # draw white pawns if dead
-                screen.blit(deadWHITEPAWNIMAGE, (whiteXOffset, round((HEIGHT/1000)*950)))
-                whiteXOffset+=round((WIDTH/1400)*50)
-
-        squareList = str(board).split()
-        colCount = 7
-        rowCount = 7
-        for square in squareList:
-        # black pieces
-            if square == 'r':
-                screen.blit(BLACKROOKIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'n':
-                screen.blit(BLACKKNIGHTIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'b':
-                screen.blit(BLACKBISHOPIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'k':
-                screen.blit(BLACKKINGIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'q':
-                screen.blit(BLACKQUEENIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'p':
-                screen.blit(BLACKPAWNIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            # white pieces
-            elif square == 'R':
-                screen.blit(WHITEROOKIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'N':
-                screen.blit(WHITEKNIGHTIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'B':
-                screen.blit(WHITEBISHOPIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'K':
-                screen.blit(WHITEKINGIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'Q':
-                screen.blit(WHITEQUEENIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-            elif square == 'P':
-                screen.blit(WHITEPAWNIMAGE, (colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100) )
-        
-        
-
-            colCount-=1
-            if colCount == -1:
-                colCount=7
-                rowCount-=1
+    squareList = str(board).split()
+    colCount = 0
+    rowCount = 0
+    if not(perspectiveWhite):
+        squareList.reverse()
+    for square in squareList:
+        tmp_image:pygame.Surface=images.getImage(square)
+        if tmp_image.get_flags!=-1:
+            screen.blit(tmp_image,(colCount*round((WIDTH/1400)*100), rowCount*round((HEIGHT/1000)*100) + (HEIGHT/1000)*100))
+        colCount+=1
+        if colCount == 8:
+            colCount = 0
+            rowCount+=1
 
 def drawValidMoves(mouse: tuple, board: chess.Board, clicked: bool, perspectiveWhite: bool): # draws valid moves on screen when square is clicked
     if perspectiveWhite:
