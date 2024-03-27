@@ -211,33 +211,34 @@ def drawValidMoves(mouse: tuple, board: chess.Board, clicked: bool, perspectiveW
         None
     """    
 
+    #mouse_x and mouse_y are the board coordinates where the mouse is
     mouse_x=math.floor((mouse[0]-0)/round((WIDTH/1400)*100))
     mouse_y=7-math.floor((mouse[1]-((HEIGHT/1000)*100))/round((HEIGHT/1000)*100))
     if not(perspectiveWhite):
         mouse_x=7-mouse_x
         mouse_y=7-mouse_y
-    if mouse_x>=0 and mouse_x<=7 and mouse_y>=0 and mouse_y<=7 and clicked:
-        for move in legalMovesForSquare:
+
+    if mouse_x>=0 and mouse_x<=7 and mouse_y>=0 and mouse_y<=7 and clicked: #check if mouse is on the board and clicking
+        for move in legalMovesForSquare: #if the mouse is clicking on a current legal move, stop this function (this should be removed in the future when clicking is refactored)
             if chess.square_name(chess.square(mouse_x,mouse_y))==move[2:4]:
                 return
+            
         coords.clear()
         legalMovesForSquare.clear()
-        for move in list(board.generate_legal_moves()):
-            move:chess.Move
-            move=move.uci()
+        for move in list(board.generate_legal_moves()): # add a bitmask to the legal move generator for performance if needed
+            move=move.uci() #turn the move into a string
 
-            if move[:2]==chess.square_name(chess.square(mouse_x,mouse_y)):
-                #print(move)
+            if move[:2]==chess.square_name(chess.square(mouse_x,mouse_y)): 
                 legalMovesForSquare.append(move)
                 cl = (ord(move[2])-97) # cols a-h represented as 0-7
                 rw = int(move[3])-1 # rows 1-8 as 0-7
-                if perspectiveWhite:
+                if perspectiveWhite: #two different ways to draw depending on the perspective
                     coords.append(((cl)*round((WIDTH/1400)*100)+(WIDTH/1400)*50, ((HEIGHT/1000)*850)-(rw)*((HEIGHT/1000)*100)))
                 else:
                     coords.append(((7-cl)*round((WIDTH/1400)*100)+(WIDTH/1400)*50, ((HEIGHT/1000)*850)-(7-rw)*((HEIGHT/1000)*100)))
 
     if len(coords) != 0: #drawing the spots and handling the click should be in seperate functions. 
-        for coord in coords:
+        for coord in coords: #draw all of the spots
             pygame.draw.circle(screen, (255,1,1), coord, 10)
 
 def drawHint(board: chess.Board, perspectiveWhite: bool): # best move contains zero or 1 string at all times
