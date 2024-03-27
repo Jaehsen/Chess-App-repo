@@ -1,3 +1,8 @@
 Player:     Win:
 Patrick		False
 sdfdsfadf		False
+a		True
+Player		False
+Player		True
+Player		True
+j		True

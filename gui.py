@@ -9,6 +9,7 @@ import os
 import AI
 import random
 import pieceImages
+import math
 
 pygame.init()
 
@@ -209,68 +210,35 @@ def drawValidMoves(mouse: tuple, board: chess.Board, clicked: bool, perspectiveW
     Returns:
         None
     """    
-    if perspectiveWhite:
-        rowNum = 8
-        for row in range(0,8): # loop through all squares to find which one was clicked on
-            asciiVal = 97
-            for col in range(0,8):
-                                
-                if col*round((WIDTH/1400)*100) <= mouse[0] <= col*round((WIDTH/1400)*100)+(WIDTH/1400)*100 and row*round((HEIGHT/1000)*100)+(HEIGHT/1000)*100 <= mouse[1] <= row*round((HEIGHT/1000)*100)+(HEIGHT/1000)*200: # mouseclick is in square
-                    legalMoves = chessApp.boardToLegalMoveListUCI(board)
-                    occupiedSquaresWithLegalMoves = []
-                    for mv in legalMoves:
-                        occupiedSquaresWithLegalMoves.append(mv[:2])
 
-                    if (f"{chr(asciiVal)}{rowNum}") in occupiedSquaresWithLegalMoves: 
-                        if clicked: # update coordinates of attack squares
-                            # display legal moves for square clicked on
-                            legalMovesForSquare.clear()
-                            targetSquares.clear()
-                            for mv in legalMoves:
-                                if mv.startswith(f"{chr(asciiVal)}{rowNum}"):
-                                    legalMovesForSquare.append(mv)
-                                    targetSquares.append(mv[2:])
-                            coords.clear()
-                            for sq in targetSquares:
-                                # convert asciiValue column and row value into list of coordinates to draw circles onto target squares
-                                cl = (ord(sq[0])-97) # cols a-h represented as 0-7
-                                rw = int(sq[1])-1 # rows 1-8 as 0-7
-                                coords.append((cl*round((WIDTH/1400)*100)+(WIDTH/1400)*50, ((HEIGHT/1000)*850)-rw*((HEIGHT/1000)*100)))
-                asciiVal+=1
-            rowNum-=1
-    
-    else: # perpective is from blacks side
-        rowNum = 1
-        for row in range(0,8): # loop through all squares to find which one was clicked on
-            asciiVal = 104
-            for col in range(0,8):
-                                
-                if col*round((WIDTH/1400)*100) <= mouse[0] <= col*round((WIDTH/1400)*100)+(WIDTH/1400)*100 and row*round((HEIGHT/1000)*100)+(HEIGHT/1000)*100 <= mouse[1] <= row*round((HEIGHT/1000)*100)+(HEIGHT/1000)*200: # mouseclick is in square
-                    legalMoves = chessApp.boardToLegalMoveListUCI(board)
-                    occupiedSquaresWithLegalMoves = []
-                    for mv in legalMoves:
-                        occupiedSquaresWithLegalMoves.append(mv[:2])
+    mouse_x=math.floor((mouse[0]-0)/round((WIDTH/1400)*100))
+    mouse_y=7-math.floor((mouse[1]-((HEIGHT/1000)*100))/round((HEIGHT/1000)*100))
+    if not(perspectiveWhite):
+        mouse_x=7-mouse_x
+        mouse_y=7-mouse_y
+    if mouse_x>=0 and mouse_x<=7 and mouse_y>=0 and mouse_y<=7 and clicked:
+        for move in legalMovesForSquare:
+            if chess.square_name(chess.square(mouse_x,mouse_y))==move[2:4]:
+                return
+        coords.clear()
+        legalMovesForSquare.clear()
+        for move in list(board.generate_legal_moves()):
+            move:chess.Move
+            move=move.uci()
 
-                    if (f"{chr(asciiVal)}{rowNum}") in occupiedSquaresWithLegalMoves: 
-                        if clicked: # update coordinates of attack squares
-                            # display legal moves for square clicked on
-                            legalMovesForSquare.clear()
-                            targetSquares.clear()
-                            for mv in legalMoves:
-                                if mv.startswith(f"{chr(asciiVal)}{rowNum}"):
-                                    legalMovesForSquare.append(mv)
-                                    targetSquares.append(mv[2:])
-                            coords.clear()
-                            for sq in targetSquares:
-                                # convert asciiValue column and row value into list of coordinates to draw circles onto target squares
-                                cl = (ord(sq[0])-97) # cols a-h represented as 0-7
-                                rw = int(sq[1])-1 # rows 1-8 as 0-7
-                                coords.append(((7-cl)*round((WIDTH/1400)*100)+(WIDTH/1400)*50, ((HEIGHT/1000)*850)-(7-rw)*((HEIGHT/1000)*100)))
-                asciiVal-=1
-            rowNum+=1
-    if len(coords) != 0:  
+            if move[:2]==chess.square_name(chess.square(mouse_x,mouse_y)):
+                #print(move)
+                legalMovesForSquare.append(move)
+                cl = (ord(move[2])-97) # cols a-h represented as 0-7
+                rw = int(move[3])-1 # rows 1-8 as 0-7
+                if perspectiveWhite:
+                    coords.append(((cl)*round((WIDTH/1400)*100)+(WIDTH/1400)*50, ((HEIGHT/1000)*850)-(rw)*((HEIGHT/1000)*100)))
+                else:
+                    coords.append(((7-cl)*round((WIDTH/1400)*100)+(WIDTH/1400)*50, ((HEIGHT/1000)*850)-(7-rw)*((HEIGHT/1000)*100)))
+
+    if len(coords) != 0: #drawing the spots and handling the click should be in seperate functions. 
         for coord in coords:
-            pygame.draw.circle(screen, (255,1,1), (coord[0], coord[1]), 10)
+            pygame.draw.circle(screen, (255,1,1), coord, 10)
 
 def drawHint(board: chess.Board, perspectiveWhite: bool): # best move contains zero or 1 string at all times
     """
@@ -847,7 +815,7 @@ def main(board: chess.Board):
                 record(name, board.turn != chess.WHITE)
                 recorded = False
             gameOver(board, False)
-        if len(targetSquares) != 0:
+        if len(coords) != 0:
             drawValidMoves(mouse,board,False, perspectiveWhite) # draws currently selected attack squares
 
         for event in pygame.event.get(): # capture all pygame events in a continuous loop at 60fps
